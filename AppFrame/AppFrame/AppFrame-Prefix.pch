@@ -14,8 +14,9 @@
 
 #import <UIView+SDAutoLayout.h>
 #import "Lwt_Key.h"
-#import "App_OtherKey.h"
 #import "Lwt_Category.h"
+#import "UISetting.h"
+#import "UserCache.h"
 #import "RequestManager.h"
 #import <SVProgressHUD.h>
 

@@ -19,7 +19,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.view.backgroundColor = BASE_BGCOLOR;
+    self.view.backgroundColor = BASEBG_COLOR;
     
     [self setBackBtn];
 

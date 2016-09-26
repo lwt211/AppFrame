@@ -1,16 +1,14 @@
 //
-//  UserManager.h
-//  App
+//  UserCache.h
+//  AppFrame
 //
-//  Created by 李文韬 on 16/5/26.
+//  Created by 李文韬 on 16/9/26.
 //  Copyright © 2016年 com.wentao. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import "AllURL.h"
 
-
-@interface UserManager : NSObject
+@interface UserCache : NSObject
 
 //是否第一次进入App
 + (BOOL)isFirstOpen;
@@ -31,6 +29,12 @@
 + (BOOL)isRemenberPassWord;
 
 
+/**
+ *  保存和提取用户token
+ */
++ (void)saveToken:(NSString *)token;
++ (NSString *)getToken;
+
 
 //保存当前城市
 + (void)saveCurrentCity:(NSString *)city;
@@ -42,6 +46,5 @@
 + (NSDictionary *)getUserInfo;
 + (NSString *)getUserName;
 + (NSString *)getUerId;
-
 
 @end

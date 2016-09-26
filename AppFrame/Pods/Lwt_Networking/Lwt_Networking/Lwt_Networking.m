@@ -6,14 +6,10 @@
 //  Copyright © 2016年 com.lightcar. All rights reserved.
 //
 
-#import "Lwt_Network.h"
-#import "AllURL.h"
-#import <AFNetworking.h>
+#import "Lwt_Networking.h"
 
 
-
-
-@interface Lwt_Network ()
+@interface Lwt_Networking ()
 
 @property (nonatomic,assign,readwrite) NetworkStatus networkStatu;
 
@@ -25,15 +21,15 @@
 @end
 
 
-@implementation Lwt_Network
+@implementation Lwt_Networking
 
 
 + (instancetype)sharedHTTPSession
 {
-    static Lwt_Network *httpSession = nil;
+    static Lwt_Networking *httpSession = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        httpSession = [[Lwt_Network alloc] initHTTPSesion];
+        httpSession = [[Lwt_Networking alloc] initHTTPSesion];
     });
     
     return httpSession;
@@ -41,10 +37,10 @@
 
 + (instancetype)sharedURLSession
 {
-    static Lwt_Network *urlSession = nil;
+    static Lwt_Networking *urlSession = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        urlSession = [[Lwt_Network alloc] initURLPSesion];
+        urlSession = [[Lwt_Networking alloc] initURLPSesion];
     });
     
     return urlSession;
@@ -57,6 +53,8 @@
     self = [super init];
     if (self)
     {
+        
+        
         //缓存在缓存文件夹 NSCachesDirectory
         _httpCache = [YYCache cacheWithName:NetworkResponseName];
         _httpCache.memoryCache.shouldRemoveAllObjectsOnMemoryWarning = YES;
@@ -94,6 +92,8 @@
     self = [super init];
     if (self)
     {
+      
+        
         //缓存在缓存文件夹 NSCachesDirectory
         _urlCache = [YYCache cacheWithName:resumeDataDoucment];
         _urlCache.memoryCache.shouldRemoveAllObjectsOnMemoryWarning = YES;
@@ -114,7 +114,7 @@
 
 - (void  )GET:(NSString *)URL isCache:(BOOL)isCache parameters:(NSDictionary *)parameters success:(Success)success failure:(Failed)failure
 {
-    ShowNetActivity;
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:parameters options:NSJSONWritingPrettyPrinted error:nil];
     
@@ -133,21 +133,21 @@
         
         if (success!=nil && cacheData !=nil)
         {
-            success([self result:cacheData]);
+            success(cacheData);
         }
 
 
     }
     
     
-    [_httpManager GET:URL parameters:[self getTotalParameters:parameters] progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        HiddenNetActivity;
+    [_httpManager GET:URL parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
         if (isCache)
         {
             if (success && ![cacheData isEqual:responseObject])
             {
-                success([self result:responseObject]);
+                success(responseObject);
                 //异步缓存数据
                 [_httpCache setObject:responseObject forKey:cacheKey withBlock:nil];
             }
@@ -156,12 +156,12 @@
         {
             if (success)
             {
-                success([self result:responseObject]);
+                success(responseObject);
             }
         }
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        HiddenNetActivity;
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
         if (failure)
         {
@@ -179,7 +179,7 @@
 - (void)POST:(NSString *)URL isCache:(BOOL)isCache parameters:(NSDictionary *)parameters success:(Success)success failure:(Failed)failure
 {
 
-    ShowNetActivity;
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:parameters options:NSJSONWritingPrettyPrinted error:nil];
     
@@ -199,38 +199,37 @@
         
         if (success!=nil && cacheData !=nil)
         {
-            success([self result:cacheData]);
+            success(cacheData);
         }
     }
 
   
    
-    [_httpManager POST:URL parameters:[self getTotalParameters:parameters] progress:^(NSProgress * _Nonnull uploadProgress) {
+    [_httpManager POST:URL parameters:parameters progress:^(NSProgress * _Nonnull uploadProgress) {
 
         NSLog(@"%f",uploadProgress.completedUnitCount*0.1/uploadProgress.totalUnitCount);
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        HiddenNetActivity;
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         if (isCache)
         {
             if (success && ![cacheData isEqual:responseObject])
             {
-                success([self result:responseObject]);
+                success(responseObject);
                 //缓存数据
-                [_httpCache setObject:responseObject forKey:cacheKey withBlock:nil];
-
+             [_httpCache setObject:responseObject forKey:cacheKey withBlock:nil];
             }
             
         }else
         {
             if (success)
             {
-                success([self result:responseObject]);
+                success(responseObject);
             }
         }
 
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        HiddenNetActivity;
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         if (failure)
         {
             failure(error);
@@ -242,7 +241,7 @@
 #pragma mark - 上传数据
 - (NSURLSessionUploadTask *)uploadWithURL:(NSString *)URL parameters:(NSDictionary *)parameters datas:(NSArray<NSData *> *)datas name:(NSString *)name fileName:(NSString *)fileName mimeType:(NSString *)mimeType progress:(Progress)progress success:(Success)success failure:(Failed)failure
 {
-    ShowNetActivity;
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:URL parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         [datas enumerateObjectsUsingBlock:^(NSData * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -262,7 +261,7 @@
          }
      }
      completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-       HiddenNetActivity;
+       [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
          if (error)
          {
             
@@ -274,7 +273,7 @@
            
              if (success)
              {
-                 success([self result:responseObject]);
+                 success(responseObject);
              }
          }
      }];
@@ -290,7 +289,7 @@
 - (NSURLSessionDownloadTask *)downloadWithURL:(NSString *)URL fileName:(NSString *)fileName progress:(Progress)progress Success:(Success)success failure:(Failed)failure;
     
 {
-    ShowNetActivity;
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:URL]];
     
     NSURLSessionDownloadTask *downloadTask = [_urlManager downloadTaskWithRequest:request progress:^(NSProgress * _Nonnull downloadProgress) {
@@ -307,7 +306,7 @@
         
     } completionHandler:^(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error) {
         
-        HiddenNetActivity;
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         if (success)
         {
             success(filePath.absoluteString);
@@ -330,7 +329,7 @@
 
 - (NSURLSessionDownloadTask *)downloadwithResumeData:(NSData *)resumeData fileName:(NSString *)fileName progress:(Progress)progress Success:(Success)success failure:(Failed)failure
 {
-    ShowNetActivity;
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 
   NSURLSessionDownloadTask *downloadTask = [_urlManager downloadTaskWithResumeData:resumeData progress:^(NSProgress * _Nonnull downloadProgress) {
         //下载进度
@@ -343,7 +342,7 @@
         //返回文件位置的URL路径
         return [NSURL fileURLWithPath:fileName];
     } completionHandler:^(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error) {
-        HiddenNetActivity;
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         if (success)
         {
             success(filePath.absoluteString);
@@ -365,27 +364,6 @@
 
 
 
-#pragma mark - 获取完整数据包 后期动态添加touken 等东西
 
-- (NSDictionary *)getTotalParameters:(NSDictionary *)parameters
-{
-    return parameters;
-}
-
-
-#pragma mark - 处理数据4
-
-- (id )result:(id )responseObject
-{
-    id result = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
-    
-    if ([result isKindOfClass:[NSDictionary class]])
-    {
-         result = [result CheckNullInDic];
-    }
-    
-    return result;
- 
-}
 
 @end

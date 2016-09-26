@@ -36,12 +36,7 @@
   
     [self setSVProgress];
     
-//    [self CheckTheNetWorkStatu];
-
  
-
-//    [SVProgressHUD show];
-    
     
 }
 
@@ -158,34 +153,18 @@
 //}
 
 
-/**
- *  检查网络状态
- */
-//- (void)CheckTheNetWorkStatu
-//{
-//    
-//    [[AFNetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
-//        
-//        NSString *status_str = nil;
-//        
-//        switch (status)
-//        {
-//            case AFNetworkReachabilityStatusUnknown:status_str = @"未知网络状态";break;
-//            case AFNetworkReachabilityStatusNotReachable:status_str = @"当前网络不可用";break;
-//            case AFNetworkReachabilityStatusReachableViaWiFi:status_str = @"WIFI状态";break;
-//            case AFNetworkReachabilityStatusReachableViaWWAN:status_str = @"流量状态";break;
-//                
-//                
-//        }
-//        
-//        [MBProgressHUD bwm_showTitle:status_str toView:self.view hideAfter:1.5];
-//        
-//    }];
-//    
-//    [[AFNetworkReachabilityManager sharedManager] startMonitoring];
+
+
 //
+//- (UIViewController *)childViewControllerForStatusBarStyle
+//{
+//    return _menuVC;
 //}
 
+//- (UIViewController *)childViewControllerForStatusBarHidden
+//{
+//    return _menuVC;
+//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

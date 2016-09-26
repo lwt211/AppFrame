@@ -11,6 +11,7 @@
 @interface NSDictionary (Lwt)
 
 - (NSDictionary *)CheckNullInDic;
+- (NSArray *)checkArrInDictionary:(NSArray *)arr;
 
 - (BOOL)getBoolValueForKey:(NSString *)key defaultValue:(BOOL)defaultValue;
 

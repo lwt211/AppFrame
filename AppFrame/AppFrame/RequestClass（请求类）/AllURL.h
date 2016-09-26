@@ -12,7 +12,22 @@
 
 
 
+/**
+ *  起始页码 (有些是0 有些是1)
+ */
+
+static  NSInteger const FirstPage = 0;
+
+/**
+ *  每页条数
+ */
+static NSInteger const OnePageNum =  10;
+
+
 static NSString * const URL_HEAD = @"http://"; //正式服务器
+
+
+
 
 
 

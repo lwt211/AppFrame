@@ -7,9 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <AFNetworking.h>
-#import <YYCache.h>
+#import "AFNetworking.h"
+#import "YYCache.h"
 
+
+//缓存数据文件夹名
+static NSString *const NetworkResponseName= @"NetworkResponseCache";
+
+//续传数据文件夹名
+static NSString *const resumeDataDoucment = @"resumeDataDoucment";
 
 
 //网络状态
@@ -19,7 +25,6 @@ typedef NS_ENUM(NSUInteger, NetworkStatus) {
     NetworkStatusReachableViaWWAN =1 ,//移动网络
     NetworkStatusReachableViaWiFi =2//WIFI
 };
-
 
 
 /**
@@ -47,7 +52,7 @@ typedef void(^Failed)(NSError *error);
 typedef void (^Progress)(CGFloat progress);
 
 
-@interface Lwt_Network : NSObject
+@interface Lwt_Networking : NSObject
 
 
 @property (nonatomic,assign,readonly) NetworkStatus networkStatu;

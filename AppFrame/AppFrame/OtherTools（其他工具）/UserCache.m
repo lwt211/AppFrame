@@ -1,17 +1,17 @@
 //
-//  UserManager.m
-//  App
+//  UserCache.m
+//  AppFrame
 //
-//  Created by 李文韬 on 16/5/26.
+//  Created by 李文韬 on 16/9/26.
 //  Copyright © 2016年 com.wentao. All rights reserved.
 //
 
-#import "UserManager.h"
+#import "UserCache.h"
 
-static NSString *const LAST_RUN_VERSION_KEY =  @"last_run_version_of_application";
+#define LAST_RUN_VERSION_KEY        @"last_run_version_of_application"
 
-@implementation UserManager
 
+@implementation UserCache
 
 + (BOOL)isFirstOpen
 {
@@ -85,9 +85,6 @@ static NSString *const LAST_RUN_VERSION_KEY =  @"last_run_version_of_application
     return [[UserDefaults objectForKey:@"remenberPassWord"] boolValue];
 }
 
-
-
-
 + (void)saveCurrentCity:(NSString *)city
 {
     
@@ -123,7 +120,6 @@ static NSString *const LAST_RUN_VERSION_KEY =  @"last_run_version_of_application
     
     return [[UserDefaults objectForKey:@"userInfo"] objectForKey:@"userId"];
 }
-
 
 
 @end

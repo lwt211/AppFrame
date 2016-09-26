@@ -1,11 +1,11 @@
 
 platform :ios, ‘9.0’
 target “AppFrame” do
-pod 'AFNetworking', '~> 3.1.0'
 pod 'SDAutoLayout', '~> 1.52'
 pod 'MJRefresh', '~> 3.1.0'
 pod 'UIActivityIndicator-for-SDWebImage', '~> 1.2'
 pod 'SVProgressHUD', '~> 2.0.3'
-pod 'YYCache', '~> 1.0.4'
+pod 'Lwt_Networking', '~> 1.0.1'
+pod 'Lwt_ActionSheet', '~> 1.0.1'
 end
 
